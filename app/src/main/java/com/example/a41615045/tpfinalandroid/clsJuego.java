@@ -111,7 +111,7 @@ public class clsJuego {
 
             Timer RelojEnemigos;
             RelojEnemigos=new Timer();
-            RelojEnemigos.schedule(TareaPonerEnemigos, 0 , 100);
+            RelojEnemigos.schedule(TareaPonerEnemigos, 0 , 1000);
 
         }
 
@@ -166,15 +166,23 @@ public class clsJuego {
             AnchoEnemigo=NaveEnemiga.getWidth();
             PosicionInicial.y= PantallaDelDispositivo.height + AlturaEnemigo/2;
 
-            Log.d("PonerEnemigo", "La posicion Y es arriba de toda la pantalla");
-            PosicionInicial.y = PantallaDelDispositivo.height;
+            Log.d("PonerEnemigo", "La posicion Y es arriba de toda la pantalla"+PosicionInicial.y);
+            PosicionInicial.y = PantallaDelDispositivo.height-200;
 
-            Log.d("PonerEnemigo", "La posicion X es en el centro");
-            PosicionInicial.x = PantallaDelDispositivo.width/2;
+
+//            PosicionInicial.x = PantallaDelDispositivo.width/2;
+//            Log.d("PonerEnemigo", "La posicion X es en el centro"+PosicionInicial.x);
+
+            Log.d("PonerEnemigo", "Declaro e inicialo el generador de azar");
+            Random GeneradoDeAzar;
+            GeneradoDeAzar= new Random();
+
+            Log.d("PonerEnemigo", "La posicion X es al azar");
+            PosicionInicial.x= GeneradoDeAzar.nextInt((int) PantallaDelDispositivo.width - (int) AnchoEnemigo) + AnchoEnemigo/2;
 
             Log.d("PonerEnemigo", "La ubico en la posicion que determine");
             NaveEnemiga.setPosition(PosicionInicial.x, PosicionInicial.y);
-
+/*
             Log.d("PonerEnemigo", "Lo roto para que mire hacia abajo");
             NaveEnemiga.runAction(RotateTo.action(0.0f, 180f));
 
@@ -191,19 +199,14 @@ public class clsJuego {
 
             Log.d("PonerEnemigo", "La posicion final y va a ser abajo de todo");
             PosicionFinal.y=0;
+*/
 
             Log.d("PonerEnemigo", "Le digo que se desplace hacia la posicion final y se tarde 3 segundos en hacerlo");
-            NaveEnemiga.runAction(MoveTo.action(3, PosicionFinal.x, PosicionFinal.y));
+            NaveEnemiga.runAction(MoveTo.action(3, PosicionInicial.x, -AlturaEnemigo/2));
 
             Log.d("PonerEnemigo", "Lo agrego a la capa");
             super.addChild(NaveEnemiga);
 
-            Log.d("PonerEnemigo", "Declaro e inicialo el generador de azar");
-            Random GeneradoDeAzar;
-            GeneradoDeAzar= new Random();
-
-            Log.d("PonerEnemigo", "La posicion X es al azar");
-            PosicionInicial.x= GeneradoDeAzar.nextInt((int) PantallaDelDispositivo.width - (int) AnchoEnemigo) + AnchoEnemigo/2;
 
         }
     }
