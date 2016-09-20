@@ -2,12 +2,15 @@ package com.example.a41615045.tpfinalandroid;
 
 import android.util.Log;
 
+import org.cocos2d.actions.interval.ScaleBy;
 import org.cocos2d.layers.Layer;
 import org.cocos2d.nodes.CocosNode;
 import org.cocos2d.nodes.Director;
+import org.cocos2d.nodes.Label;
 import org.cocos2d.nodes.Scene;
 import org.cocos2d.nodes.Sprite;
 import org.cocos2d.opengl.CCGLSurfaceView;
+import org.cocos2d.types.CCPoint;
 import org.cocos2d.types.CCSize;
 
 /**
@@ -17,10 +20,14 @@ public class clsJuego {
     CCGLSurfaceView _VistaDelJuego;
     CCSize PantallaDelDispositivo;
     Sprite NaveJugador;
+    Sprite ImagenFondo;
+    Label lblTextoJuego;
+    Sprite NaveEnemiga;
 
     public clsJuego(CCGLSurfaceView VistaDelJuego) {
+
         Log.d("Bob", "Comienza el constructor de la clase");
-    _VistaDelJuego=VistaDelJuego;
+         _VistaDelJuego=VistaDelJuego;
     }
     public void ComenzarJuego(){
         Log.d("Comenzar", "Comienza el juego");
@@ -52,14 +59,113 @@ public class clsJuego {
         return EscenaADevolver;
     }
 
-    private class CapaDeFondo extends Layer {
+    class CapaDeFondo extends Layer {
+        public CapaDeFondo(){
+            Log.d("CapaDelFondo", "Comienza el constructor de la capa del fondo");
+
+            Log.d("CapaDelFondo", "Pongo la imagen del fondo del juego");
+            PonerImagenFondo();
+
+        }
+        private void PonerImagenFondo() {
+            Log.d("PonerImagenFondo", "Comienzo a poner la imagn del fondo");
+
+            Log.d("PonerImagenFondo", "Instancio el sprite");
+            ImagenFondo=Sprite.sprite("fondo.png");
+
+            Log.d("PonerImagenFondo", "La ubico en el centro de la pantalla");
+            ImagenFondo.setPosition(PantallaDelDispositivo.width/2, PantallaDelDispositivo.height/2);
+
+            Log.d("PonerImagenFondo", "Agrando la imagen el doble de su tamaño actual");
+            ImagenFondo.runAction(ScaleBy.action(0.01f, 2.0f, 3.0f));
+
+
+            Log.d("PonerImagenFondo", "La agrego a la capa");
+            super.addChild(ImagenFondo);
+        }
     }
 
-    private class CapaFrente extends Layer {
+    class CapaFrente extends Layer {
 
+        public CapaFrente() {
+
+            Log.d("Capa del frente", "Comienza el constructor de la capa del frente");
+
+            Log.d("CapaDelFrente", "Pongo al jugador en su posicion inicial");
+            PonerNaveJugadorPosicionInicial();
+
+        }
+
+        private void PonerNaveJugadorPosicionInicial() {
+            Log.d("PonerNaveJugador", "Comienzo a poner la nave del jugador en su posicion inicial");
+
+            Log.d("PonerNaveJugador", "Instancio el sprite");
+            NaveJugador = Sprite.sprite("jugador.png");
+
+            float PosicionInicialX, PosicionInicialY;
+            PosicionInicialX=PantallaDelDispositivo.width/2;
+            PosicionInicialY=PantallaDelDispositivo.height/2;
+
+            Log.d("PonerNaveJugador", "Obtengo la mitad de la altura de la nave");
+            PosicionInicialY=NaveJugador.getHeight()/2;
+
+            Log.d("PonerNaveJugador", "Lo ubico en X: "+PosicionInicialX+" - Y :"+PosicionInicialY);
+            NaveJugador.setPosition(PosicionInicialX, PosicionInicialY);
+
+           // Log.d("PonerNaveJugador", "Pongo mi nave en una posicion cualquiera");
+            // NaveJugador.setPosition(100, 300);
+
+            Log.d("NaveJugador", "Agrego la nave a la capa");
+            super.addChild(NaveJugador);
+        }
+
+        private void PonerTituloJuego() {
+
+            Log.d("PonerTituloJuego", "Comienza a poner el titulo");
+            lblTextoJuego=Label.label("Super mega juegazo", "Verdana", 30);
+
+            float AltoDelTitulo;
+            AltoDelTitulo=lblTextoJuego.getHeight();
+
+            lblTextoJuego.setPosition(PantallaDelDispositivo.width/2, PantallaDelDispositivo.height=AltoDelTitulo/2);
+            super.addChild(lblTextoJuego);
+        }
+
+        void PonerUnEnemigo(){
+
+            Log.d("PonerEnemigo", "Instancio el sprite del enemigo");
+            NaveEnemiga=Sprite.sprite("enemigo.png");
+
+
+            Log.d("PonerEnemigo", "Determino la posicion inicial");
+            CCPoint PosicionInicial;
+            PosicionInicial = new CCPoint();
+
+            Log.d("PonerEnemigo", "La posicion Y es arriba de toda la pantalla");
+            PosicionInicial.y = PantallaDelDispositivo.height;
+
+            Log.d("PonerEnemigo", "La posicion X es en el centro");
+            PosicionInicial.x = PantallaDelDispositivo.width/2;
+
+            Log.d("PonerEnemigo", "La ubico en la posicion que determine");
+            NaveEnemiga.setPosition(PosicionInicial.x, PosicionInicial.y);
+
+            Log.d("PonerEnemigo", "Determino la posicion final");
+            CCPoint PosicionFinal;
+            PosicionFinal = new CCPoint();
+
+            Log.d("PonerEnemigo", "La posicion final x va a ser igual que la inicial");
+            PosicionFinal.x=PosicionInicial.x;
+
+            Log.d("PonerEnemigo", "La posicion final y va a ser abajo de todo");
+            PosicionFinal.y=0;
+
+            Log.d("")
+
+
+            Log.d("PonerEnemigo", "Lo agrego a la capa");
+            super.addChild(NaveEnemiga);
+        }
     }
-    class CapaDelFrente extends Layer {
 
-
-    }
 }
