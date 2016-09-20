@@ -1,7 +1,10 @@
 package com.example.a41615045.tpfinalandroid;
 
+import android.provider.Settings;
 import android.util.Log;
 
+import org.cocos2d.actions.interval.MoveTo;
+import org.cocos2d.actions.interval.RotateTo;
 import org.cocos2d.actions.interval.ScaleBy;
 import org.cocos2d.layers.Layer;
 import org.cocos2d.nodes.CocosNode;
@@ -12,6 +15,10 @@ import org.cocos2d.nodes.Sprite;
 import org.cocos2d.opengl.CCGLSurfaceView;
 import org.cocos2d.types.CCPoint;
 import org.cocos2d.types.CCSize;
+
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by 41615045 on 13/9/2016.
@@ -94,6 +101,18 @@ public class clsJuego {
             Log.d("CapaDelFrente", "Pongo al jugador en su posicion inicial");
             PonerNaveJugadorPosicionInicial();
 
+            TimerTask TareaPonerEnemigos;
+            TareaPonerEnemigos=new TimerTask() {
+                @Override
+                public void run() {
+                    PonerUnEnemigo();
+                }
+            };
+
+            Timer RelojEnemigos;
+            RelojEnemigos=new Timer();
+            RelojEnemigos.schedule(TareaPonerEnemigos, 0 , 100);
+
         }
 
         private void PonerNaveJugadorPosicionInicial() {
@@ -134,12 +153,18 @@ public class clsJuego {
         void PonerUnEnemigo(){
 
             Log.d("PonerEnemigo", "Instancio el sprite del enemigo");
-            NaveEnemiga=Sprite.sprite("enemigo.png");
+            NaveEnemiga=Sprite.sprite("enemigo.gif");
 
 
             Log.d("PonerEnemigo", "Determino la posicion inicial");
             CCPoint PosicionInicial;
             PosicionInicial = new CCPoint();
+
+            Log.d("PonerEnemigo", "La posicion Y es arriba de toda la pantalla, totalmente afuera");
+            float AlturaEnemigo, AnchoEnemigo;
+            AlturaEnemigo=NaveEnemiga.getHeight();
+            AnchoEnemigo=NaveEnemiga.getWidth();
+            PosicionInicial.y= PantallaDelDispositivo.height + AlturaEnemigo/2;
 
             Log.d("PonerEnemigo", "La posicion Y es arriba de toda la pantalla");
             PosicionInicial.y = PantallaDelDispositivo.height;
@@ -150,6 +175,10 @@ public class clsJuego {
             Log.d("PonerEnemigo", "La ubico en la posicion que determine");
             NaveEnemiga.setPosition(PosicionInicial.x, PosicionInicial.y);
 
+            Log.d("PonerEnemigo", "Lo roto para que mire hacia abajo");
+            NaveEnemiga.runAction(RotateTo.action(0.0f, 180f));
+
+
             Log.d("PonerEnemigo", "Determino la posicion final");
             CCPoint PosicionFinal;
             PosicionFinal = new CCPoint();
@@ -157,14 +186,25 @@ public class clsJuego {
             Log.d("PonerEnemigo", "La posicion final x va a ser igual que la inicial");
             PosicionFinal.x=PosicionInicial.x;
 
+            Log.d("PonerEnemigo", "La posicion final Y va a ser abajo de todo");
+            PosicionFinal.y= - AlturaEnemigo/2;
+
             Log.d("PonerEnemigo", "La posicion final y va a ser abajo de todo");
             PosicionFinal.y=0;
 
-            Log.d("")
-
+            Log.d("PonerEnemigo", "Le digo que se desplace hacia la posicion final y se tarde 3 segundos en hacerlo");
+            NaveEnemiga.runAction(MoveTo.action(3, PosicionFinal.x, PosicionFinal.y));
 
             Log.d("PonerEnemigo", "Lo agrego a la capa");
             super.addChild(NaveEnemiga);
+
+            Log.d("PonerEnemigo", "Declaro e inicialo el generador de azar");
+            Random GeneradoDeAzar;
+            GeneradoDeAzar= new Random();
+
+            Log.d("PonerEnemigo", "La posicion X es al azar");
+            PosicionInicial.x= GeneradoDeAzar.nextInt((int) PantallaDelDispositivo.width - (int) AnchoEnemigo) + AnchoEnemigo/2;
+
         }
     }
 
