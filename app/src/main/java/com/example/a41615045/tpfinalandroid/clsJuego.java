@@ -30,6 +30,7 @@ public class clsJuego {
     Sprite ImagenFondo;
     Label lblTextoJuego;
     Sprite NaveEnemiga;
+    int a;
 
     public clsJuego(CCGLSurfaceView VistaDelJuego) {
 
